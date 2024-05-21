@@ -367,7 +367,6 @@ void Game::startGame() {
                 if (checkDraw() == false)
                     break;
                 turn = false;
-                board.displayBoard();
             }else {
                 computer.play();
                 if (checkDraw() == false)
@@ -381,14 +380,17 @@ void Game::startGame() {
             }
         }
 
+
         if (win == player.getSymbol())
-            cout << "Congratulations! You won! " << endl;
+            cout << "Congratulations! You won! \n\n" ;
         else if(win == computer.getsymbol())
-            cout << "Unfortunately, you lost." << endl;
+            cout << "Unfortunately, you lost.\n\n" ;
         else if(checkDraw() == false)
-            cout << "It's a tie!" << endl;
+            cout << "It's a tie! \n\n";
         else
-            cout << "Error! Something went wrong." << endl;
+            cout << "Error! Something went wrong.\n\n";
+
+        board.displayBoard();
 
         board.resetBoard();
         while (true) {
