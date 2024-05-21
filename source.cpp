@@ -274,6 +274,7 @@ bool Computer::defend() {
     return true;
 }
 
+
 void Computer::play() {
     int ran1,ran2;
 
@@ -304,7 +305,7 @@ Game::Game() {
 
 
 char Game::checkWin(Board *obje) {
-    // Satırları kontrol et
+
     if (obje->getList(0,0) == obje->getList(0,1) && obje->getList(0,1) == obje->getList(0,2))
         return obje->getList(0,0);
     else if (obje->getList(1,0) == obje->getList(1,1) && obje->getList(1,1) == obje->getList(1,2))
@@ -312,7 +313,7 @@ char Game::checkWin(Board *obje) {
     else if (obje->getList(2,0) == obje->getList(2,1) && obje->getList(2,1) == obje->getList(2,2))
         return obje->getList(2,0);
 
-    // Sütunları kontrol et
+
     else if (obje->getList(0,0) == obje->getList(1,0) && obje->getList(1,0) == obje->getList(2,0))
         return obje->getList(0,0);
     else if (obje->getList(0,1) == obje->getList(1,1) && obje->getList(1,1) == obje->getList(2,1))
@@ -320,7 +321,7 @@ char Game::checkWin(Board *obje) {
     else if (obje->getList(0,2) == obje->getList(1,2) && obje->getList(1,2) == obje->getList(2,2))
         return obje->getList(0,2);
 
-    // Köşegenleri kontrol et
+
     else if (obje->getList(0,0) == obje->getList(1,1) && obje->getList(1,1) == obje->getList(2,2))
         return obje->getList(0,0);
     else if (obje->getList(0,2) == obje->getList(1,1) && obje->getList(1,1) == obje->getList(2,0))
