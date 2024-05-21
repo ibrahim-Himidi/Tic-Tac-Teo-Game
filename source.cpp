@@ -28,7 +28,7 @@ void Board::displayBoard() {
 }
 
 bool Board::isEmpty(int index1 , int index2) {
-    if(list[index1][index2] != 'X' || list[index1][index2] != 'O')
+    if(list[index1][index2] != 'X' && list[index1][index2] != 'O')
         return true;
     else
         return false;
@@ -43,18 +43,22 @@ char Board::getList(int index1, int index2) {
 }
 
 
-void Player::setSymbol(Computer& obj) {
+
+
+
+
+void Player::setSymbol(Computer* obj) {
     while (true) {
         cout << "to Select your a player pleas enter  (X or O) : ";
         cin >> playerSym;
         cin.ignore();
         if (playerSym == 'x' || playerSym == 'X') {
             playerSym = 'X';
-            obj.setSymbol(playerSym);
+            obj->setSymbol(playerSym);
             break;
         }else if(playerSym == 'o' || playerSym == 'O') {
             playerSym = 'O';
-            obj.setSymbol(playerSym);
+            obj->setSymbol(playerSym);
             break;
         }
         cout << "Invalid input. Please try again!! \n\n";
@@ -104,7 +108,7 @@ void Player::translateId(int id) {
     }
 }
 
-void Player::play(Board& obj) {
+void Player::play(Board* obj) {
     int id;
     while (true) {
         cout << "Please enter box ID ; " ;
@@ -112,8 +116,8 @@ void Player::play(Board& obj) {
         if (id >= 1 && id <= 9)
         {
             translateId(id);
-            if(obj.isEmpty(index1,index2)) {
-                obj.updateBoard(playerSym,index1,index2);
+            if(obj->isEmpty(index1,index2)) {
+                obj->updateBoard(playerSym,index1,index2);
                 break;
             }else {
                 cout << "This position is already taken! Please choose another location. \n\n" ;
@@ -125,10 +129,17 @@ void Player::play(Board& obj) {
 
     }
 }
+
+
+
+
 void Computer::setPtr(Board *address) {
     ptrBoard = address;
 }
 
+char Computer::getsymbol() {
+    return computerSym;
+}
 
 void Computer::setSymbol(char sym) {
     if(sym == 'X') {
@@ -202,6 +213,7 @@ bool Computer::attack() {
     return true;
 
 }
+
 bool Computer::defend() {
     // Start lines check
     if(ptrBoard->getList(0,0) == playerSym && ptrBoard->getList(0,1) == playerSym && ptrBoard->isEmpty(0,2))
@@ -261,23 +273,6 @@ bool Computer::defend() {
 
     return true;
 }
-bool Game::checkDraw() {
-    if(
-        board.getList(0,0) != '1' &&
-        board.getList(0,1) != '2' &&
-        board.getList(0,2) != '3' &&
-        board.getList(1,0) != '4' &&
-        board.getList(1,1) != '5' &&
-        board.getList(1,2) != '6' &&
-        board.getList(2,0) != '7' &&
-        board.getList(2,1) != '8' &&
-        board.getList(2,2) != '9'
-        )
-        return false;
-       else
-           return true;
-}
-
 
 void Computer::play() {
     int ran1,ran2;
@@ -297,16 +292,15 @@ void Computer::play() {
     }
 
 }
-char Computer::getsymbol() {
-    return computerSym;
-}
+
+
+
 Game::Game() {
     cout << "Welcome to the Tic Tac Teo Game! \n\n";
     cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n";
     computer.setPtr(&board);
     board.resetBoard();
 }
-
 
 
 char Game::checkWin(Board *obje) {
@@ -335,16 +329,29 @@ char Game::checkWin(Board *obje) {
         return '1';
 }
 
-
-
-
+bool Game::checkDraw() {
+    if(
+        board.getList(0,0) != '1' &&
+        board.getList(0,1) != '2' &&
+        board.getList(0,2) != '3' &&
+        board.getList(1,0) != '4' &&
+        board.getList(1,1) != '5' &&
+        board.getList(1,2) != '6' &&
+        board.getList(2,0) != '7' &&
+        board.getList(2,1) != '8' &&
+        board.getList(2,2) != '9'
+        )
+        return false;
+    else
+        return true;
+}
 
 void Game::startGame() {
     computer.setPtr(&board);
     char win,option;
     bool cont;
     while (true) {
-        player.setSymbol(computer);
+        player.setSymbol(&computer);
         if(player.getSymbol() == 'X') {
             turn = true;
         } else {
@@ -355,7 +362,7 @@ void Game::startGame() {
         while (true) {
             if (turn) {
                 board.displayBoard();
-                player.play(board);
+                player.play(&board);
                 if (checkDraw() == false)
                     break;
                 turn = false;
@@ -364,9 +371,7 @@ void Game::startGame() {
                 computer.play();
                 if (checkDraw() == false)
                     break;
-              //  computer.defend();
                 turn = true;
-             //   board.displayBoard();
             }
 
             if(checkWin(&board) != '1') {
@@ -379,7 +384,7 @@ void Game::startGame() {
             cout << "Congratulations! You won! " << endl;
         else if(win == computer.getsymbol())
             cout << "Unfortunately, you lost." << endl;
-        else if(checkDraw())
+        else if(checkDraw() == false)
             cout << "It's a tie!" << endl;
         else
             cout << "Error! Something went wrong." << endl;

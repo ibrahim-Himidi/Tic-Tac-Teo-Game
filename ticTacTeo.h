@@ -36,9 +36,9 @@ private:
     char playerSym;
     int index1 , index2;
 public:
-    void setSymbol(Computer& obj);
+    void setSymbol(Computer* obj);
     char getSymbol();
-    void play(Board& obj);
+    void play(Board* obj);
     void  translateId(int id);
 };
 
